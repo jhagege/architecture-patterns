@@ -1,9 +1,14 @@
+# pylint: disable=broad-except
 import pytest
 from allocation.domain import model
 from allocation.service_layer import unit_of_work
 
 
 def insert_batch(session, ref, sku, qty, eta):
+    session.execute(
+        'INSERT INTO products (sku, version_number) VALUES (:sku)',
+        dict(sku=sku),
+    )
     session.execute(
         'INSERT INTO batches (reference, sku, _purchased_quantity, eta)'
         ' VALUES (:ref, :sku, :qty, :eta)',
@@ -31,9 +36,9 @@ def test_uow_can_retrieve_a_batch_and_allocate_to_it(session_factory):
 
     uow = unit_of_work.SqlAlchemyUnitOfWork(session_factory)
     with uow:
-        batch = uow.batches.get(reference='batch1')
+        product = uow.products.get(sku='HIPSTER-WORKBENCH')
         line = model.OrderLine('o1', 'HIPSTER-WORKBENCH', 10)
-        batch.allocate(line)
+        product.allocate(line)
         uow.commit()
 
     batchref = get_allocated_batch_ref(session, 'o1', 'HIPSTER-WORKBENCH')
