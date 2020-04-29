@@ -1,5 +1,4 @@
 import pytest
-
 import model
 import repository
 import services

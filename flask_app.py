@@ -8,6 +8,7 @@ import orm
 import repository
 import services
 
+
 orm.start_mappers()
 get_session = sessionmaker(bind=create_engine(config.get_postgres_uri()))
 app = Flask(__name__)

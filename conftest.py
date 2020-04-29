@@ -1,14 +1,15 @@
 import time
+from pathlib import Path
 
 import pytest
 import requests
 from requests.exceptions import ConnectionError
-from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, clear_mappers
 
-import config
 from orm import metadata, start_mappers
+import config
 
 
 @pytest.fixture
