@@ -4,7 +4,7 @@ from datetime import date
 
 from allocation.domain import model
 from allocation.domain.model import OrderLine
-from allocation.service_layer import unit_of_work
+from allocation.service_layer import unit_of_work, messagebus
 
 
 class InvalidSku(Exception):
@@ -33,6 +33,9 @@ def allocate(
         product = uow.products.get(sku=line.sku)
         if product is None:
             raise InvalidSku(f'Invalid sku {line.sku}')
-        batchref = product.allocate(line)
-        uow.commit()
-    return batchref
+        try:
+            batchref = product.allocate(line)
+            uow.commit()
+            return batchref
+        finally:
+            messagebus.handle(product.events)
