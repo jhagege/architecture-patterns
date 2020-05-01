@@ -1,6 +1,5 @@
 import abc
 from typing import Set
-
 from allocation.domain import model
 
 
@@ -13,7 +12,6 @@ class AbstractRepository(abc.ABC):
         self._add(product)
         self.seen.add(product)
 
-    @abc.abstractmethod
     def get(self, sku) -> model.Product:
         product = self._get(sku)
         if product:
@@ -27,6 +25,7 @@ class AbstractRepository(abc.ABC):
     @abc.abstractmethod
     def _get(self, sku) -> model.Product:
         raise NotImplementedError
+
 
 
 class SqlAlchemyRepository(AbstractRepository):

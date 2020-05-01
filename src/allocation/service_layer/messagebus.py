@@ -17,4 +17,5 @@ def send_out_of_stock_notification(event: events.OutOfStock):
 
 HANDLERS = {
     events.OutOfStock: [send_out_of_stock_notification],
+
 }  # type: Dict[Type[events.Event], List[Callable]]
